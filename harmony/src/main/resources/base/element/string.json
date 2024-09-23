@@ -1,0 +1,96 @@
+{
+  "string": [
+    {
+      "name": "page_show",
+      "value": "page from package"
+    },
+    {
+      "name": "reason",
+      "value": "相机权限"
+    },
+    {
+      "name": "microphone_reason",
+      "value": "麦克风权限"
+    },
+    {
+      "name": "microphone_read",
+      "value": "读取"
+    },
+    {
+      "name": "microphone_write",
+      "value": "写入"
+    },
+    {
+      "name": "200px",
+      "value": "200px"
+    },
+    {
+      "name": "50px",
+      "value": "50px"
+    },
+    {
+      "name": "120px",
+      "value": "120px"
+    },
+    {
+      "name": "10px",
+      "value": "10px"
+    },
+    {
+      "name": "10vp",
+      "value": "10vp"
+    },
+    {
+      "name": "100px",
+      "value": "100px"
+    },
+    {
+      "name": "150px",
+      "value": "150PX"
+    },
+    {
+      "name": "75px",
+      "value": "75PX"
+    },
+    {
+      "name": "40px",
+      "value": "40px"
+    },
+    {
+      "name": "code_format",
+      "value": "码类型"
+    },
+    {
+      "name": "result_content",
+      "value": "码值"
+    },
+    {
+      "name": "code_react",
+      "value": "码位置信息"
+    },
+    {
+      "name": "Scan_diaLog_not_found",
+      "value": "未识别到二维码/条形码。"
+    },
+    {
+      "name": "location_reason",
+      "value": "位置"
+    },
+    {
+      "name": "read_image",
+      "value": "读取图片"
+    },
+    {
+      "name": "write_image",
+      "value": "写入图片"
+    },
+    {
+      "name": "read_media",
+      "value": "读取媒体"
+    },
+    {
+      "name": "write_media",
+      "value": "写入媒体"
+    }
+  ]
+}

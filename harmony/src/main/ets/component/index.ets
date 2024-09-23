@@ -1,0 +1,7 @@
+export  * from './FlashingLightComponent'
+export  * from './SwitchCamerasComponent'
+export  * from './TorchComponent'
+export *  from './FocusAreaComponent'
+export *  from './TakePictureComponent'
+export *  from './ScanLine'
+export *  from './ScanBoxComponent'

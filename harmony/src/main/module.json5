@@ -1,0 +1,49 @@
+{
+  "module": {
+    "name": "camera_kit",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet",
+      "2in1"
+    ],
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.CAMERA",
+        "reason": "$string:reason",
+        "usedScene": {
+          "when": "always"
+        }
+      },
+      {
+        "name": "ohos.permission.MICROPHONE",
+        "reason": "$string:microphone_reason",
+        "usedScene": {
+          "when": "always"
+        }
+      },
+      {
+        "name": "ohos.permission.APPROXIMATELY_LOCATION",
+        "reason": "$string:location_reason",
+        "usedScene": {
+          "when": "always"
+        }
+      },
+      {
+        "name": "ohos.permission.READ_MEDIA",
+        "reason": "$string:read_image",
+        "usedScene": {
+          "when": "always"
+        }
+      },
+      {
+        "name":"ohos.permission.WRITE_MEDIA",
+        "reason": "$string:write_image",
+        "usedScene": {
+          "when": "always"
+        }
+      }
+
+    ]
+  }
+}

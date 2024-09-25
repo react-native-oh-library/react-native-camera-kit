@@ -1,15 +1,16 @@
 // 扫码框组件
+import { ScanLine } from './ScanLine';
 
 @Component
 export struct ScanBoxComponent {
-  private mBorderWidth = 1.6;
-  private mBorderRadius = 10;
+  private mBorderWidth = 1;
   private mRowSize = 40;
-  private boxWidth = 200;
-  private boxHeight = 150;
+  @Prop frameColor: string | Color;
+  @Prop laserColor: string | Color;
+
 
   build() {
-    Row() {
+    Stack() {
       // 对焦框
       Flex({ direction: FlexDirection.Column, justifyContent: FlexAlign.SpaceBetween }) {
         Flex({ justifyContent: FlexAlign.SpaceBetween }) {
@@ -20,8 +21,8 @@ export struct ScanBoxComponent {
               left: this.mBorderWidth,
               top: this.mBorderWidth
             },
-            color: Color.White,
-            radius: { topLeft: this.mBorderRadius }
+            color: this.frameColor,
+
           })
           .size({ width: this.mRowSize, height: this.mRowSize })
 
@@ -32,8 +33,8 @@ export struct ScanBoxComponent {
               right: this.mBorderWidth,
               top: this.mBorderWidth
             },
-            color: Color.White,
-            radius: { topRight: this.mBorderRadius }
+            color: this.frameColor,
+
           })
           .size({ width: this.mRowSize, height: this.mRowSize })
         }
@@ -46,8 +47,8 @@ export struct ScanBoxComponent {
               left: this.mBorderWidth,
               bottom: this.mBorderWidth
             },
-            color: Color.White,
-            radius: { bottomLeft: this.mBorderRadius }
+            color: this.frameColor,
+
           })
           .size({ width: this.mRowSize, height: this.mRowSize })
 
@@ -58,20 +59,17 @@ export struct ScanBoxComponent {
               right: this.mBorderWidth,
               bottom: this.mBorderWidth
             },
-            color: Color.White,
-            radius: { bottomRight: this.mBorderRadius }
+            color: this.frameColor,
           })
           .size({ width: this.mRowSize, height: this.mRowSize })
         }
-      }
-      .width(this.boxWidth)
-      .height(this.boxHeight)
 
-      // .position({
-      //   x: this.focusPointVal[0] - this.mFocusPoint,
-      //   y: this.focusPointVal[1] - this.mFocusPoint
-      // })
+      }
+
+      ScanLine({ laserColor: this.laserColor})
     }
+    .width('75%')
+    .height('50%')
     .zIndex(1)
   }
 }

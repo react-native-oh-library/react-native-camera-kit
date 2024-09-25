@@ -38,7 +38,7 @@ export struct ScanLine {
       this.lightFactor, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0];
   @State isOpenAlbum: boolean = false;
   @State isScanMotion: boolean = true; // Whether to display the scanning effect
-  @Prop laserColor: string | Color = Color.Red;
+  @Prop laserColor: string | Color;
   private particlePropertyAnimationDown: ParticlePropertyAnimation<number> = {
     from: 0,
     to: 0.5,

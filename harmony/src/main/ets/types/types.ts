@@ -80,3 +80,14 @@ export enum FocusMode {
 
 
 export type CameraError = {}
+
+export interface BoxSizes {
+  centerSize: {
+    width: number;
+    height: number;
+  };
+  sideSize: {
+    width: number;
+    height: number;
+  };
+}

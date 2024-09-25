@@ -1,5 +1,5 @@
 import { RNComponentContext, RNViewBase } from '@rnoh/react-native-openharmony';
-import { RTNCamerakitViewSpec } from './types';
+import { BoxSizes, RTNCamerakitViewSpec } from './types';
 import { abilityAccessCtrl, common } from '@kit.AbilityKit';
 import Logger from './utils/Logger';
 import { display } from '@kit.ArkUI';
@@ -11,6 +11,7 @@ import { camera } from '@kit.CameraKit';
 import {
   FlashingLightComponent,
   FocusAreaComponent,
+  RatioOverlayView,
   ScanBoxComponent,
   ScanLine,
   SwitchCamerasComponent,
@@ -22,7 +23,7 @@ import { FocusComponent } from './component/FocusComponent';
 import { CameraError, CameraType } from './types';
 import { scanBarcode, scanCore } from '@kit.ScanKit';
 import CameraManager from './service/CameraManager';
-import { getRatioOverlay, getTypeStr, isEmptyValue } from './utils/utils';
+import { getRatioOverlay, getTypeStr, getViewSize, isEmptyValue } from './utils/utils';
 import { AsyncCallback, BusinessError } from '@kit.BasicServicesKit';
 import { window } from '@kit.ArkUI';
 import { audio } from '@kit.AudioKit';
@@ -73,6 +74,16 @@ export struct RTNCameraKitView {
   @State tipShow: boolean = false;
   @State isInitSuccess: boolean = false;
   @State currentProps: CameraProps = {};
+  @State viewSize: BoxSizes = {
+    centerSize: {
+      width: 0,
+      height: 0
+    },
+    sideSize: {
+      width: 0,
+      height: 0
+    }
+  }
   mXComponentController: XComponentController = new XComponentController();
   atManager = abilityAccessCtrl.createAtManager();
   private scanOptions: scanBarcode.ScanOptions = {
@@ -120,7 +131,6 @@ export struct RTNCameraKitView {
     const props = this.descriptorWrapper.props as CameraProps;
     const width = this.descriptorWrapper.width;
     const height = this.descriptorWrapper.height;
-    const resizeMode = props.resizeMode;
     const ratioOverlay = getRatioOverlay(props.ratioOverlay);
     if (ratioOverlay) {
       Logger.info(TAG, `ratioOverlay: ${JSON.stringify(ratioOverlay)}`);
@@ -132,12 +142,10 @@ export struct RTNCameraKitView {
     this.displayHeight = height || this.screenHeight; // 屏幕宽度
     this.displayWidth = width || this.screenWidth; // 屏幕高度
 
-    let defaultSize =
-      DisplayCalculator.calcSurfaceDisplaySize(this.displayWidth, this.displayHeight, this.defaultAspectRatio);
-    this.cameraHeight = defaultSize.height > this.displayHeight ? this.displayHeight : defaultSize.height;
-    this.cameraWidth = defaultSize.width;
-    this.cameraOffsetX = (this.displayWidth - this.cameraWidth) / 2;
-    this.cameraOffsetY = (this.displayHeight - this.cameraHeight) / 2;
+    this.cameraHeight = this.displayHeight;
+    this.cameraWidth = this.displayWidth;
+    this.viewSize = getViewSize(this.displayWidth, this.displayHeight, this.defaultAspectRatio);
+    console.log('viewSize', JSON.stringify(this.viewSize))
   }
 
   async initSession() {
@@ -317,6 +325,7 @@ export struct RTNCameraKitView {
 
   private updateProps(props: CameraProps) {
     this.isScan = props.scanBarcode;
+    this.setDisplay();
     Logger.info(TAG, `updateProps:${JSON.stringify(props)}`);
     if (!this.isInitSuccess) {
       return;
@@ -326,7 +335,6 @@ export struct RTNCameraKitView {
     } else {
       CameraService.initProps(props);
     }
-    this.setDisplay();
   }
 
   async aboutToDisappear() {
@@ -438,7 +446,7 @@ export struct RTNCameraKitView {
     FocusComponent({
       focusPointBol: $focusPointBol,
       focusPointVal: $focusPointVal,
-      frameColor: this.currentProps.frameColor || Color.Yellow,
+      focusColor: Color.Yellow,
     })
     // 曝光对焦手指点击区域
     FocusAreaComponent({
@@ -494,21 +502,26 @@ export struct RTNCameraKitView {
           // this.TakePictureBuilder();
           if (this.isScanned && this.isScan) {
             if (this.currentProps.showFrame) {
-              ScanBoxComponent()
+              ScanBoxComponent({
+                frameColor: this.currentProps.frameColor || Color.Yellow,
+                laserColor: this.currentProps?.laserColor ?? Color.Red
+              })
             }
-            ScanLine({ laserColor: this.currentProps?.laserColor ?? Color.Red })
+            // ScanLine({ laserColor: this.currentProps?.laserColor ?? Color.Red })
             if (this.tipShow) {
               this.tipContainer()
             }
           }
+          if (this.currentProps.ratioOverlay) {
+            RatioOverlayView({
+              ratioOverlayColor: this.currentProps.ratioOverlayColor ?? Color.Black,
+              viewSize: this.viewSize,
+              displayWidth: this.displayWidth,
+              displayHeight: this.displayHeight
+            })
+          }
         }
       }
-      .onKeyEvent((event?: KeyEvent) => {
-        if (event) {
-          Logger.info(TAG, `event-KeyEvent${JSON.stringify(event)}`)
-        }
-      })
-      .border({ width: 0.5, color: this.currentProps.ratioOverlayColor ?? '#ffffff77' })
       .height(this.displayHeight)
       .width(this.displayWidth)
       .backgroundColor(Color.Black)

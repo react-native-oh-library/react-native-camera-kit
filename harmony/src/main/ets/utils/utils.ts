@@ -43,11 +43,11 @@ export function getRatioOverlay(ratioOverlay: string) {
   let result = 16 / 9;
   if (ratioOverlay) {
     let parts = ratioOverlay.split(":");
-    let num1 = parseInt(parts[0], 10);
-    let num2 = parseInt(parts[1], 10);
-    const max = Math.max(num1, num2);
-    const min = Math.min(num1, num2);
-    result = max / min;
+    if (parts.length === 2) {
+      let inputHeight = parseInt(parts[0], 10);
+      let inputWidth = parseInt(parts[1], 10);
+      result = inputWidth / inputHeight;
+    }
   }
   return result;
 }
@@ -69,4 +69,44 @@ export function isEmptyValue(value: any): boolean {
     return true;
   }
   return false;
+}
+
+interface ViewSize {
+  width: number;
+  height: number;
+}
+
+export const getViewSize = (screenWidth: number, screenHeight: number, ratio: number) => {
+  let centerSize: ViewSize = {
+    width: 0,
+    height: 0
+  };
+  let sideSize: ViewSize = {
+    width: 0,
+    height: 0
+  };
+  if (screenWidth < screenHeight) {
+    centerSize.width = screenWidth
+    centerSize.height = screenHeight * ratio;
+    sideSize.width = centerSize.width
+    sideSize.height = (screenHeight - centerSize.height) / 2.0
+  } else if (screenWidth > screenHeight) {
+    centerSize.width = screenWidth / ratio
+    centerSize.height = screenHeight
+
+    sideSize.width = (screenWidth - centerSize.width) / 2.0
+    sideSize.height = centerSize.height
+
+  } else { // ratio is 1:1
+    centerSize.width = screenWidth
+    centerSize.height = screenHeight
+
+    sideSize.width = centerSize.width
+    sideSize.height = (screenHeight - centerSize.height) / 2.0
+  }
+
+  return {
+    centerSize: { width: Math.floor(centerSize.width), height: Math.floor(centerSize.height) },
+    sideSize: { width: Math.floor(sideSize.width), height: Math.floor(sideSize.height) }
+  }
 }

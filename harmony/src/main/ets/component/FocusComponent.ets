@@ -9,7 +9,7 @@ export struct FocusComponent {
   private mRowSize = 20;
   private mFocusPoint = 40;
   private focusFrameSize = 80;
-  @Prop frameColor: Color | string;
+  @Prop focusColor: Color | string;
 
   build() {
     if (this.focusPointBol) {
@@ -24,7 +24,7 @@ export struct FocusComponent {
                 left: this.mBorderWidth,
                 top: this.mBorderWidth
               },
-              color: this.frameColor,
+              color: this.focusColor,
               radius: { topLeft: this.mBorderRadius }
             })
             .size({ width: this.mRowSize, height: this.mRowSize })
@@ -36,7 +36,7 @@ export struct FocusComponent {
                 right: this.mBorderWidth,
                 top: this.mBorderWidth
               },
-              color: this.frameColor,
+              color: this.focusColor,
               radius: { topRight: this.mBorderRadius }
             })
             .size({ width: this.mRowSize, height: this.mRowSize })
@@ -50,7 +50,7 @@ export struct FocusComponent {
                 left: this.mBorderWidth,
                 bottom: this.mBorderWidth
               },
-              color: this.frameColor,
+              color: this.focusColor,
               radius: { bottomLeft: this.mBorderRadius }
             })
             .size({ width: this.mRowSize, height: this.mRowSize })
@@ -62,7 +62,7 @@ export struct FocusComponent {
                 right: this.mBorderWidth,
                 bottom: this.mBorderWidth
               },
-              color: this.frameColor,
+              color: this.focusColor,
               radius: { bottomRight: this.mBorderRadius }
             })
             .size({ width: this.mRowSize, height: this.mRowSize })

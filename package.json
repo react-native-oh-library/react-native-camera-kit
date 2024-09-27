@@ -1,6 +1,6 @@
 {
   "name": "@react-native-oh-tpl/react-native-camera-kit",
-  "version": "14.0-0.2",
+  "version": "14.0.0-beta15-0.0.1",
   "description": "A high performance, fully featured, rock solid camera library for React Native applications",
   "react-native": "src/index",
   "source": "src/index",

@@ -117,7 +117,7 @@ class CameraService {
         return;
       }
       this.previewProfileObj = previewProfile;
-      console.log('previewProfile:::',JSON.stringify(previewProfile))
+      console.log('previewProfile:::', JSON.stringify(previewProfile))
       // 创建previewOutput输出对象
       this.previewOutput = this.createPreviewOutputFn(this.cameraManager, this.previewProfileObj, surfaceId);
       if (this.previewOutput === undefined) {
@@ -611,8 +611,9 @@ class CameraService {
     }
     fs.closeSync(file);
     this.photoAsset.uri = photoFile;
-    this.photoAsset.name= photoAccess.get('display_name') as string;
+    this.photoAsset.name = photoAccess.get('display_name') as string;
   }
+
   /**
    * 监听拍照事件
    */
@@ -642,7 +643,11 @@ class CameraService {
           Logger.error(TAG, 'photoAsset is undefined');
           return;
         }
-        this.savePicture(photoAsset);
+        const uri = photoAsset.get('uri') as string;
+        const name = photoAsset.get('display_name') as string;
+        this.photoAsset.uri = uri;
+        this.photoAsset.name = name;
+        // this.savePicture(photoAsset);
       });
     } catch (err) {
       Logger.error(TAG, 'photoOutputCallBack error');

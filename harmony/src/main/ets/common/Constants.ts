@@ -48,8 +48,7 @@ export class Constants {
   static readonly X_COMPONENT_SURFACE_HEIGHT = 1080;
   static readonly PERMISSION_LIST: Array<Permissions> =
     [
-      "ohos.permission.CAMERA", "ohos.permission.MICROPHONE", "ohos.permission.READ_IMAGEVIDEO",
-      "ohos.permission.WRITE_IMAGEVIDEO"
+      "ohos.permission.CAMERA", "ohos.permission.MICROPHONE", "ohos.permission.APPROXIMATELY_LOCATION",
     ]
 }
 ;

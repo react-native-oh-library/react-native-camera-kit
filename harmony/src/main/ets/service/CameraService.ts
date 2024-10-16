@@ -117,7 +117,6 @@ class CameraService {
         return;
       }
       this.previewProfileObj = previewProfile;
-      console.log('previewProfile:::', JSON.stringify(previewProfile))
       // 创建previewOutput输出对象
       this.previewOutput = this.createPreviewOutputFn(this.cameraManager, this.previewProfileObj, surfaceId);
       if (this.previewOutput === undefined) {

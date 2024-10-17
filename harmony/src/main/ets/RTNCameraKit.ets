@@ -4,7 +4,6 @@ import { abilityAccessCtrl, common } from '@kit.AbilityKit';
 import Logger from './utils/Logger';
 import { display } from '@kit.ArkUI';
 import { Constants } from './common/Constants';
-import DisplayCalculator from './common/DisplayCalculator';
 import CameraService from './service/CameraService'
 import ScanService from './service/ScanService';
 import { camera } from '@kit.CameraKit';
@@ -13,17 +12,16 @@ import {
   FocusAreaComponent,
   RatioOverlayView,
   ScanBoxComponent,
-  ScanLine,
   SwitchCamerasComponent,
   TakePictureComponent,
   TorchComponent
 } from './component';
 import { CameraProps } from '../ets/types/CameraProps'
 import { FocusComponent } from './component/FocusComponent';
-import { CameraError, CameraType } from './types';
+import { CameraError } from './types';
 import { scanBarcode, scanCore } from '@kit.ScanKit';
 import CameraManager from './service/CameraManager';
-import { getRatioOverlay, getTypeStr, getViewSize, isEmptyValue } from './utils/utils';
+import { getRatioOverlay, getTypeStr, getViewSize } from './utils/utils';
 import { AsyncCallback, BusinessError } from '@kit.BasicServicesKit';
 import { window } from '@kit.ArkUI';
 import { audio } from '@kit.AudioKit';
@@ -113,9 +111,6 @@ export struct RTNCameraKitView {
 
   audioVolumeChange() {
     this.audioVolumeManager.on('volumeChange', (volumeEvent: audio.VolumeEvent) => {
-      console.info(`volumeChange-VolumeType of stream: ${volumeEvent.volumeType} `);
-      console.info(`volumeChange-Volume level: ${volumeEvent.volume} `);
-      console.info(`volumeChange-Whether to updateUI: ${volumeEvent.updateUi} `);
       this.onCaptureButtonPressIn();
     });
   }
@@ -145,7 +140,6 @@ export struct RTNCameraKitView {
     this.cameraHeight = this.displayHeight;
     this.cameraWidth = this.displayWidth;
     this.viewSize = getViewSize(this.displayWidth, this.displayHeight, this.defaultAspectRatio);
-    console.log('viewSize', JSON.stringify(this.viewSize))
   }
 
   async initSession() {
@@ -287,7 +281,6 @@ export struct RTNCameraKitView {
    * */
   async requestDeviceCameraAuthorization() {
     const result = await CameraManager.requestDeviceCameraAuthorization()
-    console.log('requestDeviceCameraAuthorization-res', result)
     this.ctx.rnInstance.emitDeviceEvent('requestDeviceCameraAuthorization', result);
   }
 
@@ -296,7 +289,6 @@ export struct RTNCameraKitView {
  * */
   async checkDeviceCameraAuthorizationStatus() {
     const result = CameraManager.checkDeviceCameraAuthorizationStatus()
-    console.log('checkDeviceCameraAuthorizationStatus-res', result)
     this.ctx.rnInstance.emitDeviceEvent('checkDeviceCameraAuthorizationStatus', result);
   }
 

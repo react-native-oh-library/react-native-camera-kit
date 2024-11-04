@@ -39,7 +39,8 @@ class CameraService {
   public photoPreviewScale: number = 1; // 预览缩放倍数
   private cameraDeviceIndex: number = 0;
   private surfaceId: string = '';
-  private outPath: string = 'photo'
+  private outPathArray: string[] = ['photo', 'video'];
+  private basicPath: string = '';
 
 
   // 推荐拍照分辨率之一
@@ -71,6 +72,7 @@ class CameraService {
 
   constructor() {
     this.phAccessHelper = photoAccessHelper.getPhotoAccessHelper(this.context);
+    this.basicPath = this.context.filesDir;
   }
 
   /**
@@ -233,7 +235,7 @@ class CameraService {
         previewProfile.format === this.previewProfileObj.format;
     });
     if (index === -1) {
-      return undefined;
+      return previewProfiles[0];
     }
     return previewProfiles[index];
   }
@@ -252,7 +254,7 @@ class CameraService {
         photoProfile.format === this.photoProfileObj.format;
     });
     if (index === -1) {
-      return undefined;
+      return photoProfiles[0];
     }
     return photoProfiles[index];
   }
@@ -362,17 +364,14 @@ class CameraService {
   async takePicture(): Promise<CaptureData> {
     Logger.info(TAG, 'takePicture start');
     this.photoAsset.uri = '';
-    const location = await this.getLocation();
-    if (location) {
-      this.photoCaptureSetting.location = location;
-    }
+    this.photoAsset.path = '';
     await this.photoOutput?.capture(this.photoCaptureSetting);
     this.photoAsset.width = this.previewProfileObj.size.width;
     this.photoAsset.height = this.previewProfileObj.size.height;
     Logger.info(TAG, 'takePicture end');
     return new Promise((resolve) => {
       const timer = setInterval(() => {
-        if (this.photoAsset.uri) {
+        if (this.photoAsset.uri && this.photoAsset.path) {
           clearInterval(timer);
           resolve(this.photoAsset);
         }
@@ -593,15 +592,15 @@ class CameraService {
  * 保存照片
  * */
   async savePicture(photoAccess: photoAccessHelper.PhotoAsset): Promise<void> {
-    let photoFile = `${this.outPath}/${Date.now().toString()}.jpeg`;
-    photoFile = await this.getMediaLibraryUri(photoFile, `${Date.now()}`, 'jpeg', photoAccessHelper.PhotoType.IMAGE)
-    // 获取文件buffer
-    let file = fs.openSync(photoAccess.uri, fs.OpenMode.READ_ONLY)
-    let stat = fs.statSync(file.fd)
+    let photoFile = `${this.basicPath}/${this.outPathArray[0]}/${Date.now().toString()}.jpeg`;
+    // photoFile = await this.getMediaLibraryUri(photoFile, `${Date.now()}`, 'jpeg', photoAccessHelper.PhotoType.IMAGE)
+    // 根据相机拍照图片路径，获取文件buffer
+    let file = fs.openSync(photoAccess.uri, fs.OpenMode.READ_ONLY);
+    let stat = fs.statSync(file.fd);
     let buffer = new ArrayBuffer(stat.size);
-    fs.readSync(file.fd, buffer)
-    fs.fsyncSync(file.fd)
-    fs.closeSync(file)
+    fs.readSync(file.fd, buffer);
+    fs.fsyncSync(file.fd);
+    fs.closeSync(file);
     try {
       file = fs.openSync(photoFile, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
       await fs.write(file.fd, buffer);
@@ -609,8 +608,10 @@ class CameraService {
       Logger.error(TAG, `savePicture statSync failed,code:${error}.`);
     }
     fs.closeSync(file);
-    this.photoAsset.uri = photoFile;
-    this.photoAsset.name = photoAccess.get('display_name') as string;
+    Logger.info(TAG, `photoFile:${JSON.stringify(photoFile)}`);
+    this.photoAsset.path = photoFile;//沙箱路径
+    this.photoAsset.uri = photoAccess.uri;//媒体路径
+    this.photoAsset.name = photoAccess.displayName;
   }
 
   /**
@@ -642,11 +643,7 @@ class CameraService {
           Logger.error(TAG, 'photoAsset is undefined');
           return;
         }
-        const uri = photoAsset.get('uri') as string;
-        const name = photoAsset.get('display_name') as string;
-        this.photoAsset.uri = uri;
-        this.photoAsset.name = name;
-        // this.savePicture(photoAsset);
+        this.savePicture(photoAsset);
       });
     } catch (err) {
       Logger.error(TAG, 'photoOutputCallBack error');

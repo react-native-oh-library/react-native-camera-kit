@@ -14,21 +14,7 @@
         "usedScene": {
           "when": "always"
         }
-      },
-      {
-        "name": "ohos.permission.MICROPHONE",
-        "reason": "$string:microphone_reason",
-        "usedScene": {
-          "when": "always"
-        }
-      },
-      {
-        "name": "ohos.permission.APPROXIMATELY_LOCATION",
-        "reason": "$string:location_reason",
-        "usedScene": {
-          "when": "always"
-        }
-      },
+      }
     ]
   }
 }

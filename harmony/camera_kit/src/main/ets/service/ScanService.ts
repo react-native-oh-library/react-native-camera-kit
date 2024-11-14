@@ -41,23 +41,19 @@ class ScanService {
   }) {
     const { options, viewControl, getResultCallback, initSuccessCallBack } = initConfig
     this.scanRelease();
-    Logger.info(TAG, `initScan types:${JSON.stringify(options)}`);
     this.isScanLine = true;
     try {
       customScan.init(options);
       this.initSuccess = true;
       initSuccessCallBack?.();
-      Logger.info(TAG, `initScan-success-初始化扫描成功`);
     } catch (error) {
       Logger.error(TAG, `init fail,初始化扫面失败 error:${JSON.stringify(error)}`);
       this.onError(`init fail, error:${JSON.stringify(error)}`)
     }
     this.scanStart(viewControl, getResultCallback);
-    Logger.info(TAG, 'initCamera end');
   }
 
   initProps(props: CameraProps) {
-    Logger.info(TAG, `CameraProps:${JSON.stringify(props)}`)
     const { zoom, maxZoom, torchMode, flashMode, zoomMode } = props;
     if (!this.initSuccess) {
       return
@@ -98,7 +94,6 @@ class ScanService {
   public scanStart(viewControl: customScan.ViewControl,
     callback: AsyncCallback<Array<scanBarcode.ScanResult>>): void {
     try {
-      Logger.info(TAG, 'Start to start camera.');
       this.isStopCamera = false;
       customScan.start(viewControl, callback);
     } catch (error) {
@@ -125,7 +120,6 @@ class ScanService {
     }
     try {
       customScan.stop().then(() => {
-        Logger.info(TAG, 'stop success!');
       }).catch((error: BusinessError) => {
         Logger.error(TAG, `stop try failed error: ${JSON.stringify(error)}`);
       })
@@ -135,7 +129,6 @@ class ScanService {
   }
 
   onZoom(zoom: number) {
-    Logger.info(TAG, `emitDeviceEvent onZoom`)
     if (this.ctx) {
       this.ctx.rnInstance?.emitDeviceEvent('onZoom', {
         nativeEvent: {
@@ -146,7 +139,6 @@ class ScanService {
   }
 
   onError(message: string) {
-    Logger.info(TAG, `emitDeviceEvent onError`)
     if (this.ctx) {
       this.ctx.rnInstance?.emitDeviceEvent('onError', {
         nativeEvent: {
@@ -158,7 +150,6 @@ class ScanService {
 
   // 设置变焦比
   setZoomFn(zoomValue: number) {
-    Logger.info(TAG, `setZoom:${JSON.stringify(zoomValue)}`);
     const currentZoom = customScan.getZoom();
     if (currentZoom === zoomValue) {
       return;
@@ -197,7 +188,6 @@ class ScanService {
     // 设置焦点
     try {
       customScan.setFocusPoint(point);
-      Logger.info(TAG, `setFocusPoint success point: ${JSON.stringify(point)}`);
     } catch (error) {
       Logger.error(TAG, `The setFocusPoint call failed. error code: ${error.code}.`);
       this.onError(`The setFocusPoint call failed. error code: ${error.code}.`)
@@ -218,7 +208,6 @@ class ScanService {
 
   //设置手电筒模式
   setTorchFn(mode: TorchMode): void {
-    Logger.info(TAG, `setTorch: ${mode}`)
     try {
       if (mode === 'on') {
         customScan.openFlashLight();
@@ -239,7 +228,6 @@ class ScanService {
     this.initSuccess = false;
     try {
       customScan.release().then(() => {
-        Logger.info(TAG, 'release success!');
       }).catch((error: BusinessError) => {
         Logger.error(TAG, `release failed error: ${JSON.stringify(error)}`);
         this.onError(`release failed error: ${JSON.stringify(error)}`)

@@ -601,13 +601,14 @@ class CameraService {
     fs.readSync(file.fd, buffer);
     fs.fsyncSync(file.fd);
     fs.closeSync(file);
+    let _file;
     try {
-      file = fs.openSync(photoFile, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
-      await fs.write(file.fd, buffer);
+      _file = fs.openSync(photoFile, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+      await fs.write(_file.fd, buffer);
     } catch (error) {
       Logger.error(TAG, `savePicture statSync failed,code:${error}.`);
     }
-    fs.closeSync(file);
+    fs.closeSync(_file);
     Logger.info(TAG, `photoFile:${JSON.stringify(photoFile)}`);
     this.photoAsset.path = photoFile;//沙箱路径
     this.photoAsset.uri = photoAccess.uri;//媒体路径

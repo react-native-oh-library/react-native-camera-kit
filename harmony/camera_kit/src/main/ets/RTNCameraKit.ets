@@ -128,7 +128,6 @@ export struct RTNCameraKitView {
     const height = this.descriptorWrapper.height;
     const ratioOverlay = getRatioOverlay(props.ratioOverlay);
     if (ratioOverlay) {
-      Logger.info(TAG, `ratioOverlay: ${JSON.stringify(ratioOverlay)}`);
       this.defaultAspectRatio = ratioOverlay;
     }
     let displayClass = display.getDefaultDisplaySync(); //获取屏幕信息
@@ -207,9 +206,7 @@ export struct RTNCameraKitView {
    * 订阅生命周期监听事件
    */
   subscribeToLifecycleEvents() {
-    Logger.info(TAG, `subscribeToLifecycleEvents start`);
     this.ctx.rnInstance.subscribeToLifecycleEvents("FOREGROUND", () => {
-      Logger.info(TAG, `subscribeToLifecycleEvents FOREGROUND`);
       const props = this.descriptorWrapper['descriptor'].rawProps as CameraProps;
       if (props.scanBarcode) {
         ScanService.scanInit({
@@ -233,22 +230,8 @@ export struct RTNCameraKitView {
       }
     })
     this.ctx.rnInstance.subscribeToLifecycleEvents("BACKGROUND", async () => {
-      Logger.info(TAG, `subscribeToLifecycleEvents BACKGROUND`);
       this.handleRelease();
     })
-    this.ctx.rnInstance.subscribeToLifecycleEvents("CONFIGURATION_UPDATE", () => {
-      Logger.info(TAG, `subscribeToLifecycleEvents CONFIGURATION_UPDATE`);
-    })
-    this.ctx.rnInstance.subscribeToLifecycleEvents("JS_BUNDLE_EXECUTION_FINISH", () => {
-      Logger.info(TAG, `subscribeToLifecycleEvents JS_BUNDLE_EXECUTION_FINISH`);
-    })
-    this.ctx.rnInstance.subscribeToLifecycleEvents("RELOAD", () => {
-      Logger.info(TAG, `subscribeToLifecycleEvents RELOAD`);
-    })
-    this.ctx.rnInstance.subscribeToLifecycleEvents("WINDOW_SIZE_CHANGE", () => {
-      Logger.info(TAG, `subscribeToLifecycleEvents WINDOW_SIZE_CHANGE`);
-    })
-    Logger.info(TAG, `subscribeToLifecycleEvents end`);
   }
 
   /*
@@ -259,18 +242,14 @@ export struct RTNCameraKitView {
       this.ctx.componentCommandReceiver.registerCommandCallback(
         this.tag,
         (command: string, args: (string | number | boolean | object)[]) => {
-          Logger.info(TAG, `command:${JSON.stringify(command)}}`);
           if (command === Constants.TACK_PHOTO) {
             this.takePhoto();
-            Logger.info(TAG, `command-takePhoto`);
           }
           if (command === Constants.REQUEST_DEVICE_CAMERA_AUTHOR) {
             this.requestDeviceCameraAuthorization();
-            Logger.info(TAG, `command-takePhoto`);
           }
           if (command === Constants.CHECK_DEVICE_CAMERA_AUTHOR) {
             this.checkDeviceCameraAuthorizationStatus();
-            Logger.info(TAG, `command-checkDeviceCameraAuthorizationStatus`);
           }
         });
     }
@@ -296,10 +275,8 @@ export struct RTNCameraKitView {
   * 获取权限
   * */
   private async requestPermissionsFn() {
-    Logger.info(TAG, `requestPermissionsFn entry`);
     try {
       this.atManager.requestPermissionsFromUser(this.appContext, Constants.PERMISSION_LIST).then(() => {
-        Logger.info(TAG, `request Permissions success!`);
         this.onShow = true;
       });
     } catch (err) {
@@ -318,7 +295,6 @@ export struct RTNCameraKitView {
   private updateProps(props: CameraProps) {
     this.isScan = props.scanBarcode;
     this.setDisplay();
-    Logger.info(TAG, `updateProps:${JSON.stringify(props)}`);
     if (!this.isInitSuccess) {
       return;
     }
@@ -359,7 +335,6 @@ export struct RTNCameraKitView {
   }
 
   onError(cameraError: CameraError) {
-    Logger.info(TAG, `emitDeviceEvent onError`)
     this.ctx.rnInstance.emitDeviceEvent('onError', cameraError);
   }
 
@@ -374,7 +349,6 @@ export struct RTNCameraKitView {
   /*
    * */
   handleScanResult(scanResult: Array<scanBarcode.ScanResult> | undefined) {
-    Logger.info(TAG, `scanResult: ${JSON.stringify(scanResult)}`)
     if (this.ctx && scanResult) {
       this.ctx.rnInstance.emitDeviceEvent('onReadCode', {
         nativeEvent: {
@@ -391,7 +365,6 @@ export struct RTNCameraKitView {
         AVPlayerService.avPlayerFdSrc();
       }
       const photoAsset = await CameraService.takePicture()
-      Logger.info(TAG, `takePhoto_photoAsset: ${JSON.stringify(photoAsset)}`)
       if (this.ctx && photoAsset) {
         this.ctx.rnInstance.emitDeviceEvent('onTaskPhoto', photoAsset);
       }
@@ -520,12 +493,10 @@ export struct RTNCameraKitView {
       .gesture(
         PinchGesture({ fingers: 2 })
           .onActionStart((event: GestureEvent) => {
-            Logger.info('Pinch start')
           })
           .onActionUpdate((event: GestureEvent) => {
             if (event) {
               this.scaleValue = event.scale;
-              Logger.info(TAG, `scaleValue${this.scaleValue}`)
             }
           })
           .onActionEnd((event: GestureEvent) => {

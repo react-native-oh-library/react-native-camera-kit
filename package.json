@@ -1,6 +1,6 @@
 {
   "name": "@react-native-oh-tpl/react-native-camera-kit",
-  "version": "14.0.0-beta15-0.0.5",
+  "version": "14.0.0-beta15-0.0.6",
   "description": "A high performance, fully featured, rock solid camera library for React Native applications",
   "react-native": "src/index",
   "source": "src/index",
@@ -20,7 +20,14 @@
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
-  "keywords": ["react-native","react-native-camera-kit", "ios", "android", "harmony"],
+  "keywords": [
+    "react-native",
+    "ios",
+    "android",
+    "src",
+    "lib",
+    "harmony"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/react-native-oh-library/react-native-camera-kit"
@@ -36,8 +43,8 @@
     "react-native": "*"
   },
   "harmony": {
-     "alias": "react-native-camera-kit",
-      "codegenConfig": {
+    "alias": "react-native-camera-kit",
+    "codegenConfig": {
       "specPaths": [
         "./src"
       ]

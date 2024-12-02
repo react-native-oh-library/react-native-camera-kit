@@ -1,0 +1,11 @@
+[
+    {
+        "Name": "react-native-camera-kit",
+        "License": "MIT License",
+        "License File": "https://github.com/teslamotors/react-native-camera-kit/blob/master/LICENSE",
+        "Version Number": "14.0.0-beta15",
+		"Owner" : "xiafeng@huawei.com",
+        "Upstream URL": "https://github.com/teslamotors/react-native-camera-kit",
+        "Description": "A high performance, fully featured, rock solid camera library for React Native applications"
+    }
+]

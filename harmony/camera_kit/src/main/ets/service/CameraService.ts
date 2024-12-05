@@ -73,6 +73,23 @@ class CameraService {
   constructor() {
     this.phAccessHelper = photoAccessHelper.getPhotoAccessHelper(this.context);
     this.basicPath = this.context.filesDir;
+    for (let outPath of this.outPathArray) {
+      this.initTempPath(outPath);
+    }
+  }
+
+  initTempPath(path: string) {
+    let pathDir = this.basicPath + '/' + path;
+    let res;
+    try {
+      res = fs.accessSync(pathDir);
+    } catch (error) {
+      Logger.error(TAG, `constructor error path not exists:${JSON.stringify(error)}`);
+    }
+    if (!res) {
+      Logger.error(TAG, `constructor photo path not exists:${pathDir}`);
+      fs.mkdirSync(pathDir, true);
+    }
   }
 
   /**

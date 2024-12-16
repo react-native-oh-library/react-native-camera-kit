@@ -1,6 +1,9 @@
-/**
- * Use these variables when you tailor your ArkTS code. They must be of the const type.
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd. All rights reserved
+ * Use of this source code is governed by a MIT license that can be
+ * found in the LICENSE file.
  */
+
 export const HAR_VERSION = '14.0.0-beta15-0.0.7';
 export const BUILD_MODE_NAME = 'debug';
 export const DEBUG = true;

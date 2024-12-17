@@ -1,6 +1,6 @@
 # react-native-camera-kit
 
-This project is based on [react-native-camera-kit](https://github.com/react-native-oh-library/react-native-camera-kit)
+This project is based on [react-native-camera-kit](https://github.com/teslamotors/react-native-camera-kit)
 
 ## Documentation
 
@@ -10,4 +10,4 @@ This project is based on [react-native-camera-kit](https://github.com/react-nati
 
 ## License
 
-This library is licensed under [The MIT License (MIT)](https://github.com/react-native-oh-library/react-native-camera-kit/blob/sig/LICENSE)
+This library is licensed under [The MIT License (MIT)](https://github.com/teslamotors/react-native-camera-kit/blob/master/LICENSE)

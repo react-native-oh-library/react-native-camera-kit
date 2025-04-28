@@ -318,8 +318,11 @@ export struct RTNCameraKitView {
   }
 
   handleRelease() {
-    CameraService.releaseCamera();
-    ScanService.scanRelease();
+    if (this.isScan) {
+      ScanService.scanRelease();
+    } else {
+      CameraService.releaseCamera();
+    }
     this.clearTimer();
     this.isScanned = false;
     this.tipShow = false;

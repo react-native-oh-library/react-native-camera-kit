@@ -28,6 +28,7 @@ class ScanService {
   private zoomMode: ZoomMode = 'on';
   public isScanLine: boolean = false;
   public isStopCamera: boolean = false;
+  public isReleaseCamera: boolean = true;
   private initSuccess: boolean = false;
 
   constructor() {
@@ -101,6 +102,7 @@ class ScanService {
     callback: AsyncCallback<Array<scanBarcode.ScanResult>>): void {
     try {
       this.isStopCamera = false;
+      this.isReleaseCamera = false;
       customScan.start(viewControl, callback);
     } catch (error) {
       Logger.error(TAG, `Failed to start customScan. Code: ${error.code}`);
@@ -230,8 +232,12 @@ class ScanService {
    * 页面消失或隐藏时，释放相机流
    */
   async scanRelease() {
+    if (this.isReleaseCamera) {
+      return;
+    }
     this.scanStop();
     this.initSuccess = false;
+    this.isReleaseCamera = true;
     try {
       customScan.release().then(() => {
       }).catch((error: BusinessError) => {

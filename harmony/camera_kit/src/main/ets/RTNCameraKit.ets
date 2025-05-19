@@ -129,7 +129,7 @@ export struct RTNCameraKitView {
 
   setDisplay() {
     // 默认竖屏
-    const props = this.descriptorWrapper.props as CameraProps;
+    const props = this.descriptorWrapper.props;
     const width = this.descriptorWrapper.width;
     const height = this.descriptorWrapper.height;
     const ratioOverlay = getRatioOverlay(props.ratioOverlay);

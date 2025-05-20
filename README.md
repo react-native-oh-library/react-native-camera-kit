@@ -1,6 +1,6 @@
 # react-native-camera-kit
 
-This project is based on [react-native-camera-kit](https://github.com/teslamotors/react-native-camera-kit)
+This project is based on [react-native-camera-kit@14.0.0-beta15](https://github.com/teslamotors/react-native-camera-kit/tree/v14.0.0-beta15)
 
 ## Documentation
 

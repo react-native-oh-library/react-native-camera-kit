@@ -127,10 +127,11 @@ class ScanService {
       this.onError(`Failed to off lightingFlash. Code: ${error.code}, message: ${error.message}`)
     }
     try {
-      customScan.stop().then(() => {
-      }).catch((error: BusinessError) => {
-        Logger.error(TAG, `stop try failed error: ${JSON.stringify(error)}`);
-      })
+      // 为了扫码页面不卡住
+      // customScan.stop().then(() => {
+      // }).catch((error: BusinessError) => {
+      //   Logger.error(TAG, `stop try failed error: ${JSON.stringify(error)}`);
+      // })
     } catch (error) {
       Logger.error(TAG, `stop catch failed error: ${JSON.stringify(error)}`);
     }
@@ -158,6 +159,11 @@ class ScanService {
 
   // 设置变焦比
   setZoomFn(zoomValue: number) {
+    if (this.isStopCamera) {
+      this.isStopCamera = false
+      customScan.rescan()
+      return;
+    }
     const currentZoom = customScan.getZoom();
     if (currentZoom === zoomValue) {
       return;
@@ -195,6 +201,11 @@ class ScanService {
   setFocusPointFn(point: scanBarcode.Point): void {
     // 设置焦点
     try {
+      if (this.isStopCamera) {
+        this.isStopCamera = false
+        customScan.rescan()
+        return;
+      }
       customScan.setFocusPoint(point);
     } catch (error) {
       Logger.error(TAG, `The setFocusPoint call failed. error code: ${error.code}.`);

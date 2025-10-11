@@ -32,6 +32,7 @@ export class Constants {
   static readonly TACK_PHOTO: string = 'takePhoto';
   static readonly REQUEST_DEVICE_CAMERA_AUTHOR: string = 'requestDeviceCameraAuthorization';
   static readonly CHECK_DEVICE_CAMERA_AUTHOR: string = 'checkDeviceCameraAuthorizationStatus';
+  static readonly MOCK_ONERROR: string = 'mockOnError';
   /**
    * The full percentage of component.
    */

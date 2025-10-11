@@ -74,6 +74,14 @@ const Camera = React.forwardRef<CameraApi, CameraProps>((props, ref) => {
     });
   };
 
+
+  const mockOnError = ():Promise<void> => {
+       return new Promise(resolve => {
+      if (!nativeRef.current) throw new Error('nativeRef.current is NaN');
+      CameraCommands.mockOnError(nativeRef.current);
+    });
+  };
+
   DeviceEventEmitter.addListener('onZoom', (zoom: OnZoom) => {
     onZoom?.(zoom);
   });
@@ -109,6 +117,7 @@ const Camera = React.forwardRef<CameraApi, CameraProps>((props, ref) => {
     capture,
     requestDeviceCameraAuthorization,
     checkDeviceCameraAuthorizationStatus,
+    mockOnError
   }));
 
   return (

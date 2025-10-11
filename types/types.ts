@@ -50,6 +50,7 @@ export type CameraApi = {
   capture: () => Promise<CaptureData>;
   requestDeviceCameraAuthorization: () => Promise<boolean>;
   checkDeviceCameraAuthorizationStatus: () => Promise<boolean>;
+  mockOnError: () => void;
 };
  
 export enum FlashMode {

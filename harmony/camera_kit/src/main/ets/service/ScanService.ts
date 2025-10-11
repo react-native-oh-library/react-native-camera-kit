@@ -158,9 +158,15 @@ class ScanService {
 
   // 设置变焦比
   setZoomFn(zoomValue: number) {
-    const currentZoom = customScan.getZoom();
-    if (currentZoom === zoomValue) {
-      return;
+    try {
+      const currentZoom = customScan.getZoom();
+      if (currentZoom === zoomValue) {
+        return;
+      }
+    } catch (e) {
+      // Error message:Internal error. This interface cannot be used after the camera session is paused.
+      Logger.error(TAG, `This interface cannot be used after the camera session is paused`);
+      this.onError('This interface cannot be used after the camera session is paused');
     }
     if (this.zoomMode === 'off') {
       return;

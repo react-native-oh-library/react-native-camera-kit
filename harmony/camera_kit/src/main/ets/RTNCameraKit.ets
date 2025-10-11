@@ -5,7 +5,7 @@
  */
 
 import { RNComponentContext, RNViewBase } from '@rnoh/react-native-openharmony';
-import { BoxSizes, RTNCamerakitViewSpec } from './types';
+import { BoxSizes, FocusMode, RTNCamerakitViewSpec } from './types';
 import { abilityAccessCtrl, common } from '@kit.AbilityKit';
 import Logger from './utils/Logger';
 import { display } from '@kit.ArkUI';
@@ -78,6 +78,7 @@ export struct RTNCameraKitView {
   @State tipShow: boolean = false;
   @State isInitSuccess: boolean = false;
   @State currentProps: CameraProps = {};
+  @State isMockOnError: boolean = false;
   @State viewSize: BoxSizes = {
     centerSize: {
       width: 0,
@@ -257,6 +258,9 @@ export struct RTNCameraKitView {
           if (command === Constants.CHECK_DEVICE_CAMERA_AUTHOR) {
             this.checkDeviceCameraAuthorizationStatus();
           }
+          if (command === Constants.MOCK_ONERROR) {
+            this.mockOnError();
+          }
         });
     }
   }
@@ -275,6 +279,13 @@ export struct RTNCameraKitView {
   async checkDeviceCameraAuthorizationStatus() {
     const result = CameraManager.checkDeviceCameraAuthorizationStatus()
     this.ctx.rnInstance.emitDeviceEvent('checkDeviceCameraAuthorizationStatus', result);
+  }
+
+  /**
+   * 模拟onError回调
+   */
+  mockOnError() {
+    this.isMockOnError = true;
   }
 
   /*
@@ -299,10 +310,17 @@ export struct RTNCameraKitView {
   }
 
   private updateProps(props: CameraProps) {
+    console.error("updateProps "+props.focusMode)
     this.isScan = props.scanBarcode;
     this.setDisplay();
     if (!this.isInitSuccess) {
       return;
+    }
+    //锁定模式居中显示黄色焦点框
+    if(props.focusMode == FocusMode.FOCUS_MODE_LOCKED) {
+       this.focusPointBol = true;
+       this.focusPointVal[0] = this.cameraWidth/2;
+       this.focusPointVal[1] = this.cameraHeight/2;
     }
     if (this.isScan) {
       ScanService.initProps(props);
@@ -431,7 +449,8 @@ export struct RTNCameraKitView {
       focusFrameDisplayDuration: this.currentProps.resetFocusTimeout ?? 5000,
       isScan: this.isScan,
       cameraOffsetX: this.cameraOffsetX,
-      cameraOffsetY: this.cameraOffsetY
+      cameraOffsetY: this.cameraOffsetY,
+      isMockOnError: this.isMockOnError
     })
   }
 

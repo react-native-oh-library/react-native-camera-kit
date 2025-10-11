@@ -86,6 +86,7 @@ export enum FocusMode {
 }
 
 export interface NativeCameraProps extends ViewProps {
+  focusMode?: WithDefault<0 | 1 | 2 | 3 ,0>;
   flashMode?: WithDefault<0 | 1 | 2 | 3 ,0>;
   zoomMode?: WithDefault<'on' | 'off','on'>;
   torchMode?: WithDefault<'on' | 'off' ,'off'>;
@@ -139,12 +140,14 @@ export interface VisionCameraCommandsType {
   takePhoto: (viewRef: React.ElementRef<CameraComponentType>,) => Promise<any>;
   requestDeviceCameraAuthorization: (viewRef: React.ElementRef<CameraComponentType>,) => Promise<boolean>;
   checkDeviceCameraAuthorizationStatus: (viewRef: React.ElementRef<CameraComponentType>,) => Promise<boolean>;
+  mockOnError: (viewRef: React.ElementRef<CameraComponentType>,) => Promise<boolean>;
 }
 
 export const CameraCommands: VisionCameraCommandsType = codegenNativeCommands<VisionCameraCommandsType>({
   supportedCommands: [
     'takePhoto',
     'requestDeviceCameraAuthorization',
-    'checkDeviceCameraAuthorizationStatus'
+    'checkDeviceCameraAuthorizationStatus',
+    'mockOnError'
   ],
 });

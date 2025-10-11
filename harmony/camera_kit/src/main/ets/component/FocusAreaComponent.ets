@@ -25,6 +25,7 @@ export struct FocusAreaComponent {
   @Prop focusFrameDisplayDuration: number = 5000;
   @Prop cameraOffsetX: number;
   @Prop cameraOffsetY: number;
+  @Prop isMockOnError: boolean = false;
 
   build() {
     Row() {
@@ -41,6 +42,11 @@ export struct FocusAreaComponent {
         const point: scanBarcode.Point | camera.Point =
           { x: e.touches[0].y / this.xComponentHeight, y: 1 - (e.touches[0].x / this.xComponentWidth) };
         if (this.isScan) {
+          if(this.isMockOnError) {
+             //用于模拟onError回调
+             ScanService.setFocusPointFn(null)
+             return;
+          }
           ScanService.setFocusPointFn(point)
         } else {
           CameraService.setFocusPoint(point);
